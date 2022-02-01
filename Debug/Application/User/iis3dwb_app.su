@@ -1,0 +1,10 @@
+iis3dwb_app.c:61:6:IIS3DWB_Peripheral_Init	40	static
+iis3dwb_app.c:98:6:IIS3DWB_OS_Init	40	static
+iis3dwb_app.c:121:13:IIS3DWB_Thread	56	static
+iis3dwb_app.c:248:13:IIS3DWB_Int_Callback	8	static
+iis3dwb_app.c:255:6:IIS3DWB_Set_State	16	static
+iis3dwb_app.c:260:6:IIS3DWB_Set_ODR	16	static
+iis3dwb_app.c:265:6:IIS3DWB_Set_FS	16	static
+iis3dwb_app.c:271:6:IIS3DWB_Start	8	static
+iis3dwb_app.c:277:6:IIS3DWB_Stop	8	static
+iis3dwb_app.c:283:13:IIS3DWB_Data_Ready	24	static

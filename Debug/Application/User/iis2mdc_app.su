@@ -1,0 +1,10 @@
+iis2mdc_app.c:64:6:IIS2MDC_Peripheral_Init	32	static
+iis2mdc_app.c:89:6:IIS2MDC_OS_Init	40	static
+iis2mdc_app.c:108:13:IIS2MDC_Thread	40	static
+iis2mdc_app.c:204:13:IIS2MDC_Int_Callback	8	static
+iis2mdc_app.c:210:6:IIS2MDC_Set_State	16	static
+iis2mdc_app.c:215:6:IIS2MDC_Set_ODR	16	static
+iis2mdc_app.c:220:6:IIS2MDC_Set_FS	16	static
+iis2mdc_app.c:226:6:IIS2MDC_Start	8	static
+iis2mdc_app.c:232:6:IIS2MDC_Stop	8	static
+iis2mdc_app.c:237:13:IIS2MDC_Data_Ready	24	static

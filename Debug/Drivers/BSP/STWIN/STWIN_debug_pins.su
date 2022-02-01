@@ -1,0 +1,6 @@
+STWIN_debug_pins.c:80:6:BSP_DEBUG_PIN_Init_All	8	static
+STWIN_debug_pins.c:110:6:BSP_DEBUG_PIN_Init	88	static
+STWIN_debug_pins.c:128:7:BSP_DEBUG_PIN_DeInit	16	static
+STWIN_debug_pins.c:134:6:BSP_DEBUG_PIN_On	16	static
+STWIN_debug_pins.c:139:6:BSP_DEBUG_PIN_Off	16	static
+STWIN_debug_pins.c:144:6:BSP_DEBUG_PIN_Toggle	16	static

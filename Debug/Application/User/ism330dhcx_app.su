@@ -1,0 +1,10 @@
+ism330dhcx_app.c:58:6:ISM330DHCX_Peripheral_Init	40	static
+ism330dhcx_app.c:91:6:ISM330DHCX_OS_Init	40	static
+ism330dhcx_app.c:113:13:ISM330DHCX_Thread	72	static
+ism330dhcx_app.c:363:13:ISM330DHCX_Int_Callback	8	static
+ism330dhcx_app.c:369:6:ISM330DHCX_Set_State	16	static
+ism330dhcx_app.c:374:6:ISM330DHCX_Set_ODR	16	static
+ism330dhcx_app.c:379:6:ISM330DHCX_Set_FS	16	static
+ism330dhcx_app.c:385:6:ISM330DHCX_Start	8	static
+ism330dhcx_app.c:391:6:ISM330DHCX_Stop	8	static
+ism330dhcx_app.c:396:13:ISM330DHCX_Data_Ready	24	static
