@@ -469,7 +469,7 @@ void SM_I2C_ErrorCallback(I2C_HandleTypeDef *I2cHandle)
 void SM_Peripheral_Init(void)
 {
   SM_DMA_Init();
-  SM_I2C_Init();
+//  SM_I2C_Init();
   SM_SPI_Init();
   SM_TIM_Init();
 }

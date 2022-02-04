@@ -106,7 +106,7 @@ int main(void)
   PVD_Config();
   
   /* Configure DEBUG PIN and LED */
-  BSP_DEBUG_PIN_Init_All();
+//  BSP_DEBUG_PIN_Init_All();
   BSP_LED_Init(LED1);
   BSP_LED_Init(LED2);
   __HAL_RCC_GPIOA_CLK_ENABLE();

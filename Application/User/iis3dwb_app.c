@@ -63,12 +63,21 @@ void IIS3DWB_Peripheral_Init(void)
   GPIO_InitTypeDef GPIO_InitStruct = {0};
   
   /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOE_CLK_ENABLE();
-  __HAL_RCC_GPIOF_CLK_ENABLE();
+//  __HAL_RCC_GPIOE_CLK_ENABLE();
+//  __HAL_RCC_GPIOF_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();		//SPI2_CS
+  __HAL_RCC_GPIOC_CLK_ENABLE();		//SPI2_MOSI,SPI2_INT
+  __HAL_RCC_GPIOD_CLK_ENABLE();		//SPI2_CLK,SPI2_MISO
+  __HAL_RCC_GPIOF_CLK_ENABLE();		//SEL_3_4
+  __HAL_RCC_GPIOG_CLK_ENABLE();		//SEL_1_2
   
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(IIS3DWB_SPI_CS_GPIO_Port, IIS3DWB_SPI_CS_Pin, GPIO_PIN_SET);
   
+  //Configure GPIO pin Output Level of 1_2_SEL and 3_4_SEL
+  HAL_GPIO_WritePin(IIS3DWB_1_2_SEL_GPIO_Port, IIS3DWB_1_2_SEL_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(IIS3DWB_3_4_SEL_GPIO_Port, IIS3DWB_3_4_SEL_Pin, GPIO_PIN_SET);
+
   /*Configure GPIO pin : IIS3DWB_SPI_CS_Pin */
   GPIO_InitStruct.Pin = IIS3DWB_SPI_CS_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -83,9 +92,9 @@ void IIS3DWB_Peripheral_Init(void)
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);  
   
   /* EXTI interrupt init*/
-  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 5, 0);
-  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
-  HAL_EXTI_GetHandle(&iis3dwb_exti, EXTI_LINE_14);  
+  HAL_NVIC_SetPriority(EXTI9_5_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
+  HAL_EXTI_GetHandle(&iis3dwb_exti, EXTI_LINE_5);
   HAL_EXTI_RegisterCallback(&iis3dwb_exti,  HAL_EXTI_COMMON_CB_ID, IIS3DWB_Int_Callback);
   
 }
