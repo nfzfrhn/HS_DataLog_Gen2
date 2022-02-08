@@ -94,8 +94,8 @@ void IIS3DWB_Peripheral_Init(void)
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI9_5_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
-  HAL_EXTI_GetHandle(&iis3dwb_exti, EXTI_LINE_5);
-  HAL_EXTI_RegisterCallback(&iis3dwb_exti,  HAL_EXTI_COMMON_CB_ID, IIS3DWB_Int_Callback);
+//  HAL_EXTI_GetHandle(&iis3dwb_exti, EXTI_LINE_5);
+//  HAL_EXTI_RegisterCallback(&iis3dwb_exti,  HAL_EXTI_COMMON_CB_ID, IIS3DWB_Int_Callback);
   
 }
 
@@ -260,6 +260,10 @@ static void IIS3DWB_Int_Callback(void)
   osSemaphoreRelease(iis3dwb_data_ready_sem_id);
 }
 
+void UpdateTimerValue(void){
+	tim_value = hsm_tim.Instance->CNT;
+	osSemaphoreRelease(iis3dwb_data_ready_sem_id);
+}
 
 void IIS3DWB_Set_State(SM_Sensor_State_t newState)
 {

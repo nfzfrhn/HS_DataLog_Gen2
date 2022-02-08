@@ -948,7 +948,7 @@ uint32_t SDM_CreateJSON(char **serialized_string)
 
 
 
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+void userButtonCallback(uint16_t GPIO_Pin)
 {
   switch(GPIO_Pin)
   {
@@ -956,26 +956,26 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
     if( HAL_GetTick() - t_start > 1000 )
     {
       if (com_status == HS_DATALOG_IDLE || com_status == HS_DATALOG_SD_STARTED )
-      {  		
+      {
         // Cannot wait since we are in an ISR
         if(osMessagePut(sdThreadQueue_id, SDM_START_STOP, 0) != osOK)
         {
           _Error_Handler();
         }
-        
+
         t_start = HAL_GetTick();
-        
+
 #if (HSD_SD_LOGGING_MODE == HSD_SD_LOGGING_MODE_INTERMITTENT)
         t_start = SD_Logging_Time_Start = HAL_GetTick();
-        
+
         if (SD_Logging_Enabled == 1)
           SD_Logging_Enabled = 0;
-        else 
+        else
           SD_Logging_Enabled = 1;
-#endif        
+#endif
       }
     }
-    
+
   default:
     break;
   }

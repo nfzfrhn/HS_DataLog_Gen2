@@ -24,6 +24,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stwin.h"
+#include "iis3dwb_app.h"
 #include "stm32l4xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -210,6 +211,7 @@ void EXTI9_5_IRQHandler(void)
    HAL_EXTI_IRQHandler(&hts221_exti);  
    HAL_EXTI_IRQHandler(&ism330dhcx_exti);  
    HAL_EXTI_IRQHandler(&iis2mdc_exti);
+   HAL_GPIO_EXTI_IRQHandler(IIS3DWB_INT1_Pin);
 }
 
 /**
@@ -238,7 +240,7 @@ void I2C2_ER_IRQHandler(void)
   */
 void EXTI15_10_IRQHandler(void)
 {
-  HAL_EXTI_IRQHandler(&iis3dwb_exti);  
+//  HAL_EXTI_IRQHandler(&iis3dwb_exti);
   HAL_EXTI_IRQHandler(&BC_exti);
 }
 

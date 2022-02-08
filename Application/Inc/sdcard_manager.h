@@ -82,6 +82,7 @@ uint8_t SDM_StopSensorThread(uint32_t id);
 uint32_t SDM_CreateJSON(char **serialized_string);
 uint32_t SDM_ReadJSON(char *serialized_string);
 
+void userButtonCallback(uint16_t GPIO_Pin);
 
 #ifdef __cplusplus
 }

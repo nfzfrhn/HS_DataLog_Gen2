@@ -527,6 +527,19 @@ void Peripheral_OS_Init_All(void)
 #endif
 }
 
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+  switch(GPIO_Pin)
+  {
+	  case USER_BUTTON_PIN:
+		  userButtonCallback(GPIO_Pin);
+	  case  IIS3DWB_INT1_Pin:
+		  UpdateTimerValue();
+
+	  default:
+		break;
+  }
+}
 
 /**
 * @brief  This function is executed in case of error occurrence

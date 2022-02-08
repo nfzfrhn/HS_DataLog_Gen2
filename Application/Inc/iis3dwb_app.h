@@ -36,6 +36,7 @@ extern osThreadId IIS3DWB_Thread_Id;
 
 extern EXTI_HandleTypeDef iis3dwb_exti;
 
+
 #define checkSPI3					0
 #define checkSPI2					1
 
@@ -73,6 +74,8 @@ void IIS3DWB_Set_ODR(float newODR);
 void IIS3DWB_Set_FS(float newFS1, float newFS2);
 void IIS3DWB_Start(void);
 void IIS3DWB_Stop(void);
+
+void UpdateTimerValue(void);
 
 #ifdef __cplusplus
 }
