@@ -21,10 +21,13 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "ff.h"			//Declaration of FAT API
 
 /* Private variables ---------------------------------------------------------*/
 USBD_HandleTypeDef USBD_Device;
 extern volatile COM_Device_t COM_device;
+
+SD_HandleTypeDef hsd1;
 
 uint8_t iis3dwb_com_id;
 uint8_t hts221_com_id;
@@ -63,6 +66,8 @@ EXTI_HandleTypeDef BC_exti;
 volatile uint32_t t_stwin = 0;
 
 extern uint32_t t_start;
+UART_HandleTypeDef huart2;
+SD_HandleTypeDef hsd1;
 uint8_t * p = 0;
 
 #if (HSD_SD_LOGGING_MODE == HSD_SD_LOGGING_MODE_INTERMITTENT)
@@ -76,11 +81,14 @@ static void Peripheral_OS_Init_All(void);
 static void BattChrg_Init(void);
 static void BC_Int_Callback(void);
 static void Error_Handler(void);
+static void MX_USART2_Init(void);
 void PVD_Config(void);
 void SystemClock_Config(void);
+static void MX_SDMMC1_SD_Init(void);
 
-
-
+//Battery SOC var
+uint32_t mvLevel = 0;
+uint32_t batteryLevel = 0;
 
 /**
 * @brief  Main program
@@ -93,11 +101,12 @@ int main(void)
   
   SystemClock_Config();
     
-  /* Enable Power Clock*/
+  /* Enable Power Clock for low power modes*/
   __HAL_RCC_PWR_CLK_ENABLE();
-  HAL_PWREx_EnableVddUSB(); 
-  HAL_PWREx_EnableVddIO2();
-  BSP_Enable_DCDC2();
+  MX_SDMMC1_SD_Init();
+  //HAL_PWREx_EnableVddUSB();		//USB
+  //HAL_PWREx_EnableVddIO2();		//VddIO2 is for Port G, since we are not using it
+  //BSP_Enable_DCDC2();				//Only for I2C 3, WiFi
   
   /* Configure the Battery Charger */
   BattChrg_Init();
@@ -107,14 +116,14 @@ int main(void)
   
   /* Configure DEBUG PIN and LED */
 //  BSP_DEBUG_PIN_Init_All();
-  BSP_LED_Init(LED1);
-  BSP_LED_Init(LED2);
-  __HAL_RCC_GPIOA_CLK_ENABLE();
+  BSP_LED_Init(LED1);				//Green
+  BSP_LED_Init(LED2);				//Orange
+  __HAL_RCC_GPIOA_CLK_ENABLE();		//PA13, 14 are for DEBUG
    
   HSD_JSON_set_allocation_functions(HSD_malloc, HSD_free);  
   
   /* Start USB */  
-  MX_USB_DEVICE_Init();
+  //MX_USB_DEVICE_Init();			//Dont know why this is disabled
   
   /* Set default device description */
   set_default_description();
@@ -127,18 +136,120 @@ int main(void)
   SM_Peripheral_Init();
   SM_OS_Init();
   
+  MX_USART2_Init();
   Peripheral_MSP_Init_All();  
   SDM_Peripheral_Init();
   
   Peripheral_OS_Init_All();  
   SDM_OS_Init();
   
+  //Show reset
+  char wakeUp [] = {"MCU WAKE UP"};
+  HAL_UART_Transmit(&huart2, (uint8_t *) wakeUp, sizeof(wakeUp), HAL_MAX_DELAY);
+
+  //Get SOC
+  BSP_BC_GetVoltageAndLevel(&mvLevel, &batteryLevel);
+
+  //Show SOC
+  char soc[21] = {"SOC in % :"};
+  char batVal[5];
+  itoa(batteryLevel, batVal,10);
+  strcat(soc, batVal);
+  HAL_UART_Transmit(&huart2, (uint8_t *) soc, sizeof(soc), HAL_MAX_DELAY);
+
   /* Start scheduler */
   osKernelStart();
   
   while(1);  
 }
 
+
+/**
+  * @brief SDMMC1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_SDMMC1_SD_Init(void)
+{
+
+  /* USER CODE BEGIN SDMMC1_Init 0 */
+
+  /* USER CODE END SDMMC1_Init 0 */
+
+  /* USER CODE BEGIN SDMMC1_Init 1 */
+
+  /* USER CODE END SDMMC1_Init 1 */
+  hsd1.Instance = SDMMC1;
+  hsd1.Init.ClockEdge = SDMMC_CLOCK_EDGE_RISING;
+  hsd1.Init.ClockPowerSave = SDMMC_CLOCK_POWER_SAVE_DISABLE;
+  hsd1.Init.BusWide = SDMMC_BUS_WIDE_4B;
+  hsd1.Init.HardwareFlowControl = SDMMC_HARDWARE_FLOW_CONTROL_DISABLE;
+  hsd1.Init.ClockDiv = 0;
+  hsd1.Init.Transceiver = SDMMC_TRANSCEIVER_DISABLE;
+  /* USER CODE BEGIN SDMMC1_Init 2 */
+
+  /* USER CODE END SDMMC1_Init 2 */
+
+}
+
+
+//UART2 INIT
+void MX_USART2_Init(void)
+{
+
+	huart2.Instance = USART2;
+	huart2.Init.BaudRate = 115200;
+	huart2.Init.WordLength = UART_WORDLENGTH_8B;
+	huart2.Init.StopBits = UART_STOPBITS_1;
+	huart2.Init.Parity = UART_PARITY_NONE;
+	huart2.Init.Mode = UART_MODE_TX_RX;
+	huart2.Init.HwFlowCtl = UART_HWCONTROL_RTS;
+	huart2.Init.OverSampling = UART_OVERSAMPLING_16;
+	huart2.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
+	huart2.Init.ClockPrescaler = UART_PRESCALER_DIV1;
+	huart2.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+	if (HAL_UART_Init(&huart2) != HAL_OK)
+	{
+		Error_Handler();
+	}
+	if (HAL_UARTEx_SetTxFifoThreshold(&huart2, UART_TXFIFO_THRESHOLD_1_8) != HAL_OK)
+	{
+		Error_Handler();
+	}
+	if (HAL_UARTEx_SetRxFifoThreshold(&huart2, UART_RXFIFO_THRESHOLD_1_8) != HAL_OK)
+	{
+		Error_Handler();
+	}
+	if (HAL_UARTEx_DisableFifoMode(&huart2) != HAL_OK)
+	{
+		Error_Handler();
+	}
+
+}
+
+
+void HAL_UART_MspInit(UART_HandleTypeDef *huart)
+{
+  /* Prevent unused argument(s) compilation warning */
+ // UNUSED(huart);
+	GPIO_InitTypeDef GPIO_InitStruct = {0};
+    __HAL_RCC_USART2_CLK_ENABLE();
+    //__HAL_RCC_GPIOD_CLK_ENABLE();
+    /**USART2 GPIO Configuration
+    PD6     ------> USART2_RX
+    PD4     ------> USART2_RTS
+    PD5     ------> USART2_TX
+    */
+    GPIO_InitStruct.Pin = USART_CR2_RXINV|USART2_RTS_Pin|USART2_TX_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+    GPIO_InitStruct.Alternate = GPIO_AF7_USART2;
+    HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+  /* NOTE : This function should not be modified, when the callback is needed,
+            the HAL_UART_MspInit can be implemented in the user file
+   */
+}
 
 /**
 * Init USB device Library, add supported class and start the library
@@ -174,14 +285,17 @@ void SystemClock_Config(void)
   }
   /**Initializes the CPU, AHB and APB busses clocks 
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI48|RCC_OSCILLATORTYPE_HSE;
+  HAL_PWR_EnableBkUpAccess();
+  __HAL_RCC_LSEDRIVE_CONFIG(RCC_LSEDRIVE_LOW);
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI48|RCC_OSCILLATORTYPE_HSE|RCC_OSCILLATORTYPE_LSE;	//Changed
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+  RCC_OscInitStruct.LSEState = RCC_LSE_ON;					//Changed
   RCC_OscInitStruct.HSI48State = RCC_HSI48_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLM = 2;
-  RCC_OscInitStruct.PLL.PLLN = 30;
-  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV5;
+  RCC_OscInitStruct.PLL.PLLN = 20;
+  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;				//Changed
   RCC_OscInitStruct.PLL.PLLQ = RCC_PLLQ_DIV2;
   RCC_OscInitStruct.PLL.PLLR = RCC_PLLR_DIV2;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
@@ -201,23 +315,43 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+#if 0
   PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_SAI1|RCC_PERIPHCLK_I2C2
     |RCC_PERIPHCLK_DFSDM1|RCC_PERIPHCLK_USB|RCC_PERIPHCLK_SDMMC1
       |RCC_PERIPHCLK_ADC|RCC_PERIPHCLK_DFSDM1AUDIO;
+#else
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_RTC|RCC_PERIPHCLK_USART2|RCC_PERIPHCLK_SDMMC1|RCC_PERIPHCLK_ADC;
+#endif
+
+#if 0
+  PeriphClkInit.Usart2ClockSelection = RCC_USART2CLKSOURCE_PCLK1;
+  PeriphClkInit.Usart3ClockSelection = RCC_USART3CLKSOURCE_PCLK1;
   PeriphClkInit.I2c2ClockSelection = RCC_I2C2CLKSOURCE_PCLK1;
   PeriphClkInit.Sai1ClockSelection = RCC_SAI1CLKSOURCE_PLLSAI1;
+#endif
+
   PeriphClkInit.AdcClockSelection = RCC_ADCCLKSOURCE_PLLSAI1;
+  PeriphClkInit.Usart2ClockSelection = RCC_USART2CLKSOURCE_PCLK1;
+
+#if 0
   PeriphClkInit.Dfsdm1ClockSelection = RCC_DFSDM1CLKSOURCE_PCLK;
   PeriphClkInit.Dfsdm1AudioClockSelection = RCC_DFSDM1AUDIOCLKSOURCE_SAI1;
   PeriphClkInit.UsbClockSelection = RCC_USBCLKSOURCE_HSI48;
+#endif
+
   PeriphClkInit.Sdmmc1ClockSelection = RCC_SDMMC1CLKSOURCE_PLLP;
+  PeriphClkInit.RTCClockSelection = RCC_RTCCLKSOURCE_LSE;
+
+#if 1
   PeriphClkInit.PLLSAI1.PLLSAI1Source = RCC_PLLSOURCE_HSE;
   PeriphClkInit.PLLSAI1.PLLSAI1M = 5;
   PeriphClkInit.PLLSAI1.PLLSAI1N = 96;
   PeriphClkInit.PLLSAI1.PLLSAI1P = RCC_PLLP_DIV25;
-  PeriphClkInit.PLLSAI1.PLLSAI1Q = RCC_PLLQ_DIV2;
+  PeriphClkInit.PLLSAI1.PLLSAI1Q = RCC_PLLQ_DIV4;
   PeriphClkInit.PLLSAI1.PLLSAI1R = RCC_PLLR_DIV4;
   PeriphClkInit.PLLSAI1.PLLSAI1ClockOut = RCC_PLLSAI1_SAI1CLK|RCC_PLLSAI1_ADC1CLK;
+#endif
+
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
   {
     Error_Handler();
@@ -282,6 +416,7 @@ void PVD_Config(void)
 void vApplicationIdleHook( void )
 {
 #if (HSD_SD_LOGGING_MODE == HSD_SD_LOGGING_MODE_INTERMITTENT) 
+	//If SD_Logging enabled start measurement
   if(SD_Logging_Enabled)
   {
     SDM_AutosaveFile();
@@ -335,6 +470,9 @@ void vApplicationIdleHook( void )
         }
       }
     }
+    //Start Measurement manually
+    //Show reset
+    SDM_StartMeasurements();
   }
 }
 

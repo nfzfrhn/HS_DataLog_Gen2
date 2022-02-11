@@ -28,6 +28,9 @@
 #include "string.h"
 #include <math.h>
 
+#include "stdio.h"				//Added
+#include "string.h"				//Added
+
 /* FatFs includes component */
 #include "ff_gen_drv.h"
 #include "sd_diskio.h"
@@ -38,6 +41,7 @@
 /* Private variables ---------------------------------------------------------*/
 FATFS SDFatFs;  /* File system object for SD card logical drive */
 FIL FileHandler[COM_MAX_SENSORS];
+FIL BatteryFileHandler;
 FIL FileConfigHandler;
 FIL FileLogError;
 FIL FileConfigJSON;
@@ -65,6 +69,9 @@ extern uint8_t mp23abs1_com_id;
 extern uint8_t ism330dhcx_com_id;
 extern uint8_t lps22hh_com_id;
 extern uint8_t stts751_com_id;
+
+extern uint32_t batteryLevel;
+extern UART_HandleTypeDef huart2;
 
 /* Private function prototypes -----------------------------------------------*/
 static void Enable_Sensors(void);
@@ -108,6 +115,7 @@ void Enable_Sensors(void)
   * to chose which sensor you want to log.         */
   
   Activate_Sensor(iis3dwb_com_id);
+#if 0
   Activate_Sensor(hts221_com_id);
   Activate_Sensor(iis2dh_com_id);
   Activate_Sensor(iis2mdc_com_id);
@@ -116,6 +124,7 @@ void Enable_Sensors(void)
   Activate_Sensor(ism330dhcx_com_id);
   Activate_Sensor(lps22hh_com_id);
   Activate_Sensor(stts751_com_id);
+#endif
 }
 
 
@@ -953,10 +962,21 @@ void userButtonCallback(uint16_t GPIO_Pin)
   switch(GPIO_Pin)
   {
   case USER_BUTTON_PIN:
+
+  default:
+    break;
+  }
+}
+
+void SDM_StartMeasurements(void)
+{
     if( HAL_GetTick() - t_start > 1000 )
     {
       if (com_status == HS_DATALOG_IDLE || com_status == HS_DATALOG_SD_STARTED )
       {
+    	 char startMeasurements [] = {"StartMeasurements!!!"};
+    	 HAL_UART_Transmit(&huart2, (uint8_t *) startMeasurements, sizeof(startMeasurements), HAL_MAX_DELAY);
+
         // Cannot wait since we are in an ISR
         if(osMessagePut(sdThreadQueue_id, SDM_START_STOP, 0) != osOK)
         {
@@ -976,11 +996,7 @@ void userButtonCallback(uint16_t GPIO_Pin)
       }
     }
 
-  default:
-    break;
-  }
 }
-
 
 #if (HSD_SD_LOGGING_MODE == HSD_SD_LOGGING_MODE_INTERMITTENT)
 void SDM_AutosaveFile(void)

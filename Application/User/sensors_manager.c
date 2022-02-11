@@ -130,28 +130,34 @@ void SM_OS_Init(void)
   /* Bus read semaphores */
   spiThreadSem_id = osSemaphoreCreate(osSemaphore(spiThreadSem), 1);
   osSemaphoreWait(spiThreadSem_id,osWaitForever);
+#if 0
   i2cThreadSem_id = osSemaphoreCreate(osSemaphore(i2cThreadSem), 1);
   osSemaphoreWait(i2cThreadSem_id,osWaitForever);    
-  
+#endif
   /* Bus read functions memory pools */  
-  spiPool_id = osPoolCreate(osPool(spiPool));  
+  spiPool_id = osPoolCreate(osPool(spiPool));
+#if 0
   i2cPool_id = osPoolCreate(osPool(i2cPool));    
-  
+#endif
   /* Bus read queues */
   spiReqQueue_id = osMessageCreate(osMessageQ(spireqqueue), NULL);
+#if 0
   i2cReqQueue_id = osMessageCreate(osMessageQ(i2creqqueue), NULL);
-  
+#endif
   vQueueAddToRegistry( spiReqQueue_id, "spiReqQueue_id" );
   
   /* SPI read Thread*/
   osThreadDef(SPI_THREAD, spi_Thread, SPI_RD_THREAD_PRIO, 1, configMINIMAL_STACK_SIZE);
-  /* SPI read Thread*/
+#if 0
+  /* I2C read Thread*/
   osThreadDef(I2C_THREAD, i2c_Thread, I2C_RD_THREAD_PRIO, 1, configMINIMAL_STACK_SIZE);
-  
+#endif
   /* Start SPI read Thread */
   spiThreadId = osThreadCreate(osThread(SPI_THREAD), NULL);
+#if 0
   /* Start I2C read Thread */
-  i2cThreadId = osThreadCreate(osThread(I2C_THREAD), NULL);  
+  i2cThreadId = osThreadCreate(osThread(I2C_THREAD), NULL);
+#endif
 }
 
 int32_t SM_SPI_Write(void * handle, uint8_t reg, uint8_t * data, uint16_t len)
@@ -483,6 +489,7 @@ static void SM_DMA_Init(void)
   /* DMA controller clock enable */
   __HAL_RCC_DMAMUX1_CLK_ENABLE();
   SM_SPIx_DMA_CLK_ENABLE();
+#if 0
   SM_I2Cx_DMA_CLK_ENABLE();
   
   /* DMA1_Channel2_IRQn interrupt configuration */
@@ -492,7 +499,7 @@ static void SM_DMA_Init(void)
   /* DMA1_Channel3_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(SM_I2C_RX_DMA_IRQn, 3, 0);
   HAL_NVIC_EnableIRQ(SM_I2C_RX_DMA_IRQn);
-
+#endif
   /* SM_SPI_RX_DMA_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(SM_SPI_RX_DMA_IRQn, 3, 0);
   HAL_NVIC_EnableIRQ(SM_SPI_RX_DMA_IRQn);
