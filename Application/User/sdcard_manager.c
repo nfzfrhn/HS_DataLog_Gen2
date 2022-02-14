@@ -962,7 +962,7 @@ void userButtonCallback(uint16_t GPIO_Pin)
   switch(GPIO_Pin)
   {
   case USER_BUTTON_PIN:
-
+	  SDM_StartMeasurements();
   default:
     break;
   }

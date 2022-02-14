@@ -21,7 +21,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "ff.h"			//Declaration of FAT API
+#include "ff.h"			//Declaration of FatFs API
 
 /* Private variables ---------------------------------------------------------*/
 USBD_HandleTypeDef USBD_Device;
@@ -97,30 +97,33 @@ uint32_t batteryLevel = 0;
 */  
 int main(void)
 {
-  HAL_Init();
-  
-  SystemClock_Config();
+
+
+
+	HAL_Init();
+
+	SystemClock_Config();
     
-  /* Enable Power Clock for low power modes*/
-  __HAL_RCC_PWR_CLK_ENABLE();
-  MX_SDMMC1_SD_Init();
-  //HAL_PWREx_EnableVddUSB();		//USB
-  //HAL_PWREx_EnableVddIO2();		//VddIO2 is for Port G, since we are not using it
-  //BSP_Enable_DCDC2();				//Only for I2C 3, WiFi
+	/* Enable Power Clock for low power modes*/
+	__HAL_RCC_PWR_CLK_ENABLE();
+	MX_SDMMC1_SD_Init();
+	//HAL_PWREx_EnableVddUSB();		/* USB */
+	//HAL_PWREx_EnableVddIO2();		/* VddIO2 is for Port G, since we are not using it */
+	//BSP_Enable_DCDC2();				//Only for I2C 3, WiFi
   
-  /* Configure the Battery Charger */
-  BattChrg_Init();
+	/* Configure the Battery Charger */
+	BattChrg_Init();
   
-  /* Configure Power Voltage Detector(PVD) to detect if battery voltage is low */
-  PVD_Config();
+	/* Configure Power Voltage Detector(PVD) to detect if battery voltage is low */
+	PVD_Config();
   
-  /* Configure DEBUG PIN and LED */
-//  BSP_DEBUG_PIN_Init_All();
-  BSP_LED_Init(LED1);				//Green
-  BSP_LED_Init(LED2);				//Orange
-  __HAL_RCC_GPIOA_CLK_ENABLE();		//PA13, 14 are for DEBUG
+	/* Configure DEBUG PIN and LED */
+	//BSP_DEBUG_PIN_Init_All();
+	BSP_LED_Init(LED1);				//Green
+	BSP_LED_Init(LED2);				//Orange
+	__HAL_RCC_GPIOA_CLK_ENABLE();		//PA13, 14 are for DEBUG
    
-  HSD_JSON_set_allocation_functions(HSD_malloc, HSD_free);  
+	HSD_JSON_set_allocation_functions(HSD_malloc, HSD_free);
   
   /* Start USB */  
   //MX_USB_DEVICE_Init();			//Dont know why this is disabled
@@ -415,6 +418,9 @@ void PVD_Config(void)
 
 void vApplicationIdleHook( void )
 {
+	//Starts measurement manually
+
+
 #if (HSD_SD_LOGGING_MODE == HSD_SD_LOGGING_MODE_INTERMITTENT) 
 	//If SD_Logging enabled start measurement
   if(SD_Logging_Enabled)
