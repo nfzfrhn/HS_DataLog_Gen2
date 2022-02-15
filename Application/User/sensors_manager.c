@@ -92,7 +92,8 @@ static void SM_SPI_Init(void)
   hsm_spi.Init.CLKPolarity = SPI_POLARITY_HIGH;
   hsm_spi.Init.CLKPhase = SPI_PHASE_2EDGE;
   hsm_spi.Init.NSS = SPI_NSS_SOFT;
-  hsm_spi.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_16; /*SPI running @ 10 MHz */ /*stwin*/
+//  hsm_spi.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_16; /*SPI running @ 10 MHz */ /*stwin*/
+  hsm_spi.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_32; /*SPI running @ 10 MHz */ /*stwin*/
   hsm_spi.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hsm_spi.Init.TIMode = SPI_TIMODE_DISABLE;
   hsm_spi.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -513,6 +514,9 @@ static void SM_SPI_MspInit(SPI_HandleTypeDef *hspi)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
   
+//  HAL_GPIO_WritePin(IIS3DWB_1_2_SEL_GPIO_Port, IIS3DWB_1_2_SEL_Pin, GPIO_PIN_RESET);
+//  HAL_GPIO_WritePin(IIS3DWB_3_4_SEL_GPIO_Port, IIS3DWB_3_4_SEL_Pin, GPIO_PIN_SET);
+
   SM_SPI_CLK_PIN_CLK_ENABLE(); 
   SM_SPI_MISO_PIN_CLK_ENABLE(); 
   SM_SPI_MOSI_PIN_CLK_ENABLE(); 

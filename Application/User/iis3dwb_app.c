@@ -89,8 +89,29 @@ void IIS3DWB_Peripheral_Init(void)
   GPIO_InitStruct.Pin =  IIS3DWB_INT1_Pin ;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);  
+  HAL_GPIO_Init(IIS3DWB_INT1_GPIO_Port, &GPIO_InitStruct);
   
+  //---------------------------------------------------------
+
+//  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+//  GPIO_InitStruct.Pull = GPIO_NOPULL;
+//  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+//
+//  GPIO_InitStruct.Alternate = SM_SPI_CLK_AF;
+//  GPIO_InitStruct.Pin = SM_SPI_CLK_PIN;
+//  HAL_GPIO_Init(SM_SPI_CLK_GPIO_PORT, &GPIO_InitStruct);
+//
+//  GPIO_InitStruct.Alternate = SM_SPI_MISO_AF;
+//  GPIO_InitStruct.Pin = SM_SPI_MISO_PIN;
+//  HAL_GPIO_Init(SM_SPI_MISO_GPIO_PORT, &GPIO_InitStruct);
+//
+//  GPIO_InitStruct.Alternate = SM_SPI_MOSI_AF;
+//  GPIO_InitStruct.Pin = SM_SPI_MOSI_PIN;
+//  HAL_GPIO_Init(SM_SPI_MOSI_GPIO_PORT, &GPIO_InitStruct);
+//
+//  SM_SPIx_CLK_ENABLE();
+  //---------------------------------------------------------
+
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI9_5_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);

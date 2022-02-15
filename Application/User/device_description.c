@@ -138,7 +138,7 @@ void set_default_description(void)
   tempSensor->sensorStatus.measuredODR = 0.0f;
   tempSensor->sensorStatus.initialOffset = 0.0f;
   tempSensor->sensorStatus.samplesPerTimestamp = 1000;
-  tempSensor->sensorStatus.isActive = 0;
+  tempSensor->sensorStatus.isActive = 1;
   tempSensor->sensorStatus.usbDataPacketSize = 3000;
   tempSensor->sensorStatus.sdWriteBufferSize = WRITE_BUFFER_SIZE_IIS3DWB;
   tempSensor->sensorStatus.comChannelNumber = -1;
@@ -166,7 +166,7 @@ void set_default_description(void)
   maxWriteTimeSensor[iis3dwb_com_id] = 1000 * WRITE_BUFFER_SIZE_IIS3DWB / (uint32_t)(IIS3DWB_Init_Param.ODR * 6); 
   
   /*****                                                                 *****/ 
-  
+#if 0
   /***** HTS221 *****/
   hts221_com_id = COM_AddSensor();
   tempSensor = COM_GetSensor(hts221_com_id);
@@ -560,7 +560,7 @@ void set_default_description(void)
   
   /* SUBSENSOR 0 STATUS */
   tempSensor->sensorStatus.subSensorStatus[0].FS = 130.0f;
-  tempSensor->sensorStatus.subSensorStatus[0].isActive = 1;
+  tempSensor->sensorStatus.subSensorStatus[0].isActive = 0;							//Changed
   tempSensor->sensorStatus.subSensorStatus[0].sensitivity = 1.0;
   
   MP23ABS1_Init_Param.ODR = tempSensor->sensorStatus.ODR;
@@ -592,7 +592,7 @@ void set_default_description(void)
   tempSensor->sensorStatus.measuredODR = 0.0f;
   tempSensor->sensorStatus.initialOffset = 0.0f;
   tempSensor->sensorStatus.samplesPerTimestamp = 20;
-  tempSensor->sensorStatus.isActive = 0;
+  tempSensor->sensorStatus.isActive = 1;					//Changed
   tempSensor->sensorStatus.usbDataPacketSize = 16;
   tempSensor->sensorStatus.sdWriteBufferSize = WRITE_BUFFER_SIZE_STTS751;
   tempSensor->sensorStatus.comChannelNumber = -1;
@@ -615,7 +615,7 @@ void set_default_description(void)
   STTS751_Init_Param.subSensorActive[0] = tempSensor->sensorStatus.subSensorStatus[0].isActive;  
 
   maxWriteTimeSensor[stts751_com_id] = 1000 * WRITE_BUFFER_SIZE_STTS751 / (uint32_t)(STTS751_Init_Param.ODR * 4); 
-
+#endif
 }
 
 void update_sensorStatus(COM_SensorStatus_t * oldSensorStatus, COM_SensorStatus_t * newSensorStatus, uint8_t sID)
