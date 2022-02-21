@@ -43,12 +43,10 @@ extern "C" {
 
 #include "arm_math.h"
 
-#include "iis3dwb_app.h"
-
-
 #include "mp23abs1_app.h"
 #include "imp34dt05_app.h"
 #include "ism330dhcx_app.h"
+#include "iis3dwb_app.h"
 #include "iis2mdc_app.h"
 #include "iis2dh_app.h"
 #include "hts221_app.h"

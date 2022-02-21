@@ -101,8 +101,10 @@ void MX_RTC_Init(void)
   sTamper.PrechargeDuration = RTC_TAMPERPRECHARGEDURATION_1RTCCLK;
   sTamper.TamperPullUp = RTC_TAMPER_PULLUP_ENABLE;
   sTamper.TimeStampOnTamperDetection = RTC_TIMESTAMPONTAMPERDETECTION_ENABLE;
-
-
+  if (HAL_RTCEx_SetTamper(&hrtc, &sTamper) != HAL_OK)
+  {
+    Error_Handler();
+  }
 
 }
 

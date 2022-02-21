@@ -73,7 +73,7 @@ void IIS3DWB_Peripheral_Init(void)
   
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(IIS3DWB_SPI_CS_GPIO_Port, IIS3DWB_SPI_CS_Pin, GPIO_PIN_SET);
-  
+
   //Configure GPIO pin Output Level of 1_2_SEL and 3_4_SEL
   HAL_GPIO_WritePin(IIS3DWB_1_2_SEL_GPIO_Port, IIS3DWB_1_2_SEL_Pin, GPIO_PIN_RESET);
   HAL_GPIO_WritePin(IIS3DWB_3_4_SEL_GPIO_Port, IIS3DWB_3_4_SEL_Pin, GPIO_PIN_SET);
@@ -84,14 +84,14 @@ void IIS3DWB_Peripheral_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(IIS3DWB_SPI_CS_GPIO_Port, &GPIO_InitStruct);
-  
+
   /*Configure GPIO pins : STTS751_INT_Pin IIS3DWB_INT1_Pin */
   GPIO_InitStruct.Pin =  IIS3DWB_INT1_Pin ;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(IIS3DWB_INT1_GPIO_Port, &GPIO_InitStruct);
   
-  //---------------------------------------------------------
+//  ---------------------------------------------------------
 
 //  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
 //  GPIO_InitStruct.Pull = GPIO_NOPULL;

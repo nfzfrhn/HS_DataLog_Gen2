@@ -18,8 +18,8 @@ sensors_manager.c:465:6:SM_I2C_MemTxCpltCallback	16	static
 sensors_manager.c:471:6:SM_I2C_ErrorCallback	16	static
 sensors_manager.c:476:6:SM_Peripheral_Init	8	static
 sensors_manager.c:488:13:SM_DMA_Init	16	static
-sensors_manager.c:513:13:SM_SPI_MspInit	56	static
-sensors_manager.c:584:13:SM_I2C_MspInit	48	static
-sensors_manager.c:649:6:SM_TIM_Init	16	static
-sensors_manager.c:674:6:SM_TIM_Start	8	static
-sensors_manager.c:684:6:SM_TIM_Stop	8	static
+sensors_manager.c:513:13:SM_SPI_MspInit	64	static
+sensors_manager.c:626:13:SM_I2C_MspInit	48	static
+sensors_manager.c:691:6:SM_TIM_Init	16	static
+sensors_manager.c:716:6:SM_TIM_Start	8	static
+sensors_manager.c:726:6:SM_TIM_Stop	8	static
