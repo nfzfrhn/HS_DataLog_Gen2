@@ -609,6 +609,30 @@ uint8_t SDM_InitFiles(void)
   dir_n = SDM_GetLastDirNumber();
   dir_n++;
   
+  //Open or Create new File in SD Card for Battery SOC
+  char BatSocFileName [20] = "Battery_SOC";
+  char dir_n_string [4];
+  itoa(dir_n,dir_n_string,10);
+  strcat(BatSocFileName,dir_n_string);
+  strcat(BatSocFileName,".txt");
+  if(f_open(&BatteryFileHandler, BatSocFileName, FA_CREATE_ALWAYS | FA_WRITE) != FR_OK)
+   {
+     return 1;
+   }
+
+  //Write data 8 in text file
+  char buffer [20] = "SOC:";
+  char socString[2];
+  itoa(batteryLevel,socString,10);
+  strcat(buffer,socString);
+  uint32_t buffSize = sizeof(buffer);
+  uint32_t byteswritten, bytesread; /*File write/read counts */
+
+  if(f_write(&BatteryFileHandler, (uint8_t*) buffer, buffSize, (void *)&byteswritten) != FR_OK)
+  {
+    return 0;
+  }
+
   sprintf(dir_name, "%s%03ld", LOG_DIR_PREFIX, dir_n);
   
   FRESULT test = f_mkdir(dir_name);
@@ -691,8 +715,10 @@ uint8_t SDM_CloseFiles(void)
         return 1;
       }
     }
-  } 
+  }
+  f_close(&BatteryFileHandler);
   
+
 #ifdef LOG_ERROR
   if (f_close(&FileLogError)!= FR_OK)
   {
@@ -720,6 +746,15 @@ uint8_t SDM_CloseFiles(void)
   HSD_JSON_free(JSON_string);
   JSON_string = NULL;
   
+  //-------------------------If SDM_FILE closed go in standby mode------------------------------------
+  //-------------------------Before entering the the standby-mode set Alarm---------------------------
+  char standbyMode [] = {"Standby-Mode!!!"};
+  HAL_UART_Transmit(&huart2, (uint8_t *) standbyMode, sizeof(standbyMode), HAL_MAX_DELAY);
+  MX_RTC_Init();
+  HAL_SuspendTick();
+  //HAL_PWR_EnterSTANDBYMode();
+  HAL_PWREx_EnterSHUTDOWNMode();
+
   return 0;
 }
 

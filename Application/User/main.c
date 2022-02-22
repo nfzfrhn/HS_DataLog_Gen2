@@ -482,6 +482,11 @@ void vApplicationIdleHook( void )
   }
 }
 
+//RTC
+void HAL_RTC_AlarmAEventCallback(RTC_HandleTypeDef *hrtc)
+{
+
+}
 
 
 /**
