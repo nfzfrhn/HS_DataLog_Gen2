@@ -51,12 +51,6 @@ STWIN_bus.c:1171:9:BSP_I2C2_RegisterDefaultMspCallbacks	8	static
 STWIN_bus.c:1197:9:BSP_I2C2_RegisterMspCallbacks	16	static
 STWIN_bus.c:1223:9:BSP_I2C4_RegisterDefaultMspCallbacks	8	static
 STWIN_bus.c:1249:9:BSP_I2C4_RegisterMspCallbacks	16	static
-STWIN_bus.c:1278:9:BSP_SPI1_RegisterDefaultMspCallbacks	8	static
-STWIN_bus.c:1304:9:BSP_SPI1_RegisterMspCallbacks	16	static
-STWIN_bus.c:1330:9:BSP_SPI2_RegisterDefaultMspCallbacks	8	static
-STWIN_bus.c:1356:9:BSP_SPI2_RegisterMspCallbacks	16	static
-STWIN_bus.c:1383:9:BSP_SPI3_RegisterDefaultMspCallbacks	8	static
-STWIN_bus.c:1409:9:BSP_SPI3_RegisterMspCallbacks	16	static
 STWIN_bus.c:1436:9:BSP_GetTick	8	static
 STWIN_bus.c:1442:26:MX_SPI1_Init	24	static
 STWIN_bus.c:1467:13:SPI1_MspInit	48	static

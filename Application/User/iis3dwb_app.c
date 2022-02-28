@@ -91,6 +91,20 @@ void IIS3DWB_Peripheral_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(IIS3DWB_INT1_GPIO_Port, &GPIO_InitStruct);
   
+  /*Configure GPIO pins: Select_1_2*/
+  GPIO_InitStruct.Pin = IIS3DWB_1_2_SEL_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+  HAL_GPIO_Init(IIS3DWB_1_2_SEL_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins: Select_3_4*/
+  GPIO_InitStruct.Pin = IIS3DWB_3_4_SEL_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+  HAL_GPIO_Init(IIS3DWB_3_4_SEL_GPIO_Port, &GPIO_InitStruct);
+
 //  ---------------------------------------------------------
 
 //  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
@@ -115,8 +129,8 @@ void IIS3DWB_Peripheral_Init(void)
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI9_5_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
-  HAL_EXTI_GetHandle(&iis3dwb_exti, EXTI_LINE_5);
-  HAL_EXTI_RegisterCallback(&iis3dwb_exti,  HAL_EXTI_COMMON_CB_ID, IIS3DWB_Int_Callback);
+//  HAL_EXTI_GetHandle(&iis3dwb_exti, EXTI_LINE_5);
+//  HAL_EXTI_RegisterCallback(&iis3dwb_exti,  HAL_EXTI_COMMON_CB_ID, IIS3DWB_Int_Callback);
   
 }
 

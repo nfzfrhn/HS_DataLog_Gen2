@@ -1009,7 +1009,7 @@ void SDM_StartMeasurements(void)
     {
       if (com_status == HS_DATALOG_IDLE || com_status == HS_DATALOG_SD_STARTED )
       {
-    	 char startMeasurements [] = {"StartMeasurements!!!"};
+    	 char startMeasurements [] = {"Start Measurements from USR Button!\n"};
     	 HAL_UART_Transmit(&huart2, (uint8_t *) startMeasurements, sizeof(startMeasurements), HAL_MAX_DELAY);
 
         // Cannot wait since we are in an ISR

@@ -147,17 +147,18 @@ int main(void)
   SDM_OS_Init();
   
   //Show reset
-  char wakeUp [] = {"MCU WAKE UP"};
+  char wakeUp [] = {"MCU wake up from main \n"};
   HAL_UART_Transmit(&huart2, (uint8_t *) wakeUp, sizeof(wakeUp), HAL_MAX_DELAY);
 
   //Get SOC
   BSP_BC_GetVoltageAndLevel(&mvLevel, &batteryLevel);
 
   //Show SOC
-  char soc[21] = {"SOC in % :"};
+  char soc[21];
   char batVal[5];
   itoa(batteryLevel, batVal,10);
-  strcat(soc, batVal);
+  //strcat(soc, batVal);
+  sprintf(soc,"SOC in %d%% \n",batVal);
   HAL_UART_Transmit(&huart2, (uint8_t *) soc, sizeof(soc), HAL_MAX_DELAY);
 
   /* Start scheduler */
@@ -478,7 +479,7 @@ void vApplicationIdleHook( void )
     }
     //Start Measurement manually
     //Show reset
-    SDM_StartMeasurements();
+//    SDM_StartMeasurements();
   }
 }
 
