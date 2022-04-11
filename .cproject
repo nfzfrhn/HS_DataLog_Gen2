@@ -45,7 +45,7 @@
 									<listOptionValue builtIn="false" value="USE_HAL_DFSDM_REGISTER_CALLBACKS"/>
 									<listOptionValue builtIn="false" value="USE_HAL_ADC_REGISTER_CALLBACKS"/>
 									<listOptionValue builtIn="false" value="USE_HAL_SAI_REGISTER_CALLBACKS"/>
-									<listOptionValue builtIn="false" value="USE_HAL_SPI_REGISTER_CALLBACKS=0"/>
+									<listOptionValue builtIn="false" value="USE_HAL_SPI_REGISTER_CALLBACKS=1"/>
 									<listOptionValue builtIn="false" value="USE_HAL_I2C_REGISTER_CALLBACKS"/>
 									<listOptionValue builtIn="false" value="STM32L4R9ZIJx"/>
 									<listOptionValue builtIn="false" value="STM32"/>

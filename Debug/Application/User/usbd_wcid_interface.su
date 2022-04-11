@@ -1,5 +1,5 @@
-usbd_wcid_interface.c:82:15:WCID_STREAMING_Itf_Init	8	static
-usbd_wcid_interface.c:101:15:WCID_STREAMING_Itf_DeInit	8	static
-usbd_wcid_interface.c:122:15:WCID_STREAMING_Itf_Control	72	static
-usbd_wcid_interface.c:411:15:WCID_STREAMING_Itf_Receive	16	static
-usbd_wcid_interface.c:422:13:_Error_Handler	4	static
+../Application/User/usbd_wcid_interface.c:82:15:WCID_STREAMING_Itf_Init	8	static
+../Application/User/usbd_wcid_interface.c:101:15:WCID_STREAMING_Itf_DeInit	8	static
+../Application/User/usbd_wcid_interface.c:122:15:WCID_STREAMING_Itf_Control	72	static
+../Application/User/usbd_wcid_interface.c:411:15:WCID_STREAMING_Itf_Receive	16	static
+../Application/User/usbd_wcid_interface.c:422:13:_Error_Handler	4	static

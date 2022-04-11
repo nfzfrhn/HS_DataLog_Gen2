@@ -1,6 +1,6 @@
 ################################################################################
 # Automatically-generated file. Do not edit!
-# Toolchain: GNU Tools for STM32 (9-2020-q2-update)
+# Toolchain: GNU Tools for STM32 (10.3-2021.10)
 ################################################################################
 
 -include ../makefile.init
@@ -61,14 +61,14 @@ BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ART
 EXECUTABLES += \
 HS_DataLog_Gen2.elf \
 
+MAP_FILES += \
+HS_DataLog_Gen2.map \
+
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
 HS_DataLog_Gen2.list \
-
-OBJCOPY_BIN += \
-HS_DataLog_Gen2.bin \
 
 
 # All Target
@@ -78,7 +78,7 @@ all: main-build
 main-build: HS_DataLog_Gen2.elf secondary-outputs
 
 # Tool invocations
-HS_DataLog_Gen2.elf: $(OBJS) $(USER_OBJS) C:\Users\Nafiz\Documents\STM_Cube_Workspace\HS_DataLog_Gen2\STM32L4R9ZIJX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+HS_DataLog_Gen2.elf HS_DataLog_Gen2.map: $(OBJS) $(USER_OBJS) C:\Users\Nafiz\Documents\STM_Cube_Workspace\HS_DataLog_Gen2\STM32L4R9ZIJX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	arm-none-eabi-gcc -o "HS_DataLog_Gen2.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\Nafiz\Documents\STM_Cube_Workspace\HS_DataLog_Gen2\STM32L4R9ZIJX_FLASH.ld" --specs=nosys.specs -Wl,-Map="HS_DataLog_Gen2.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
@@ -93,17 +93,12 @@ HS_DataLog_Gen2.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-HS_DataLog_Gen2.bin: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objcopy  -O binary $(EXECUTABLES) "HS_DataLog_Gen2.bin"
-	@echo 'Finished building: $@'
-	@echo ' '
-
 # Other Targets
 clean:
-	-$(RM) HS_DataLog_Gen2.bin HS_DataLog_Gen2.elf HS_DataLog_Gen2.list default.size.stdout
+	-$(RM) HS_DataLog_Gen2.elf HS_DataLog_Gen2.list HS_DataLog_Gen2.map default.size.stdout
 	-@echo ' '
 
-secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST) $(OBJCOPY_BIN)
+secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)
 
 fail-specified-linker-script-missing:
 	@echo 'Error: Cannot find the specified linker script. Check the linker settings in the build configuration.'

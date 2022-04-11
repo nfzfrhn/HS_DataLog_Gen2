@@ -93,6 +93,7 @@ static void SM_SPI_Init(void)
   hsm_spi.Init.CLKPhase = SPI_PHASE_2EDGE;
   hsm_spi.Init.NSS = SPI_NSS_SOFT;
   hsm_spi.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_16; /*SPI running @ 10 MHz */ /*stwin*/
+//  hsm_spi.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_32; /*SPI running @ 10 MHz */ /*stwin*/
 //  hsm_spi.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_8; /*SPI running @ 10 MHz */ /*stwin*/
   hsm_spi.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hsm_spi.Init.TIMode = SPI_TIMODE_DISABLE;
@@ -520,16 +521,16 @@ static void SM_SPI_MspInit(SPI_HandleTypeDef *hspi)
   SM_SPI_CLK_PIN_CLK_ENABLE(); 
   SM_SPI_MISO_PIN_CLK_ENABLE(); 
   SM_SPI_MOSI_PIN_CLK_ENABLE(); 
-//  __HAL_RCC_GPIOB_CLK_ENABLE();		//SPI2_CS
-//  __HAL_RCC_GPIOF_CLK_ENABLE();		//SEL_3_4
-//  __HAL_RCC_GPIOG_CLK_ENABLE();		//SEL_1_2
+  __HAL_RCC_GPIOB_CLK_ENABLE();		//SPI2_CS		Enabled from disabled
+  __HAL_RCC_GPIOF_CLK_ENABLE();		//SEL_3_4		Enabled from disabled
+  __HAL_RCC_GPIOG_CLK_ENABLE();		//SEL_1_2		Enabled from disabled
 
-//  /*Configure GPIO pin Output Level */
-//  HAL_GPIO_WritePin(IIS3DWB_SPI_CS_GPIO_Port, IIS3DWB_SPI_CS_Pin, GPIO_PIN_SET);
-//
-//  //Configure GPIO pin Output Level of 1_2_SEL and 3_4_SEL
-//  HAL_GPIO_WritePin(IIS3DWB_1_2_SEL_GPIO_Port, IIS3DWB_1_2_SEL_Pin, GPIO_PIN_RESET);
-//  HAL_GPIO_WritePin(IIS3DWB_3_4_SEL_GPIO_Port, IIS3DWB_3_4_SEL_Pin, GPIO_PIN_SET);
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(IIS3DWB_SPI_CS_GPIO_Port, IIS3DWB_SPI_CS_Pin, GPIO_PIN_SET);		//Enabled from disabled
+
+  //Configure GPIO pin Output Level of 1_2_SEL and 3_4_SEL
+  HAL_GPIO_WritePin(IIS3DWB_1_2_SEL_GPIO_Port, IIS3DWB_1_2_SEL_Pin, GPIO_PIN_RESET);	//Enabled from disabled
+  HAL_GPIO_WritePin(IIS3DWB_3_4_SEL_GPIO_Port, IIS3DWB_3_4_SEL_Pin, GPIO_PIN_SET);		//Enabled from disabled
   
   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -546,6 +547,35 @@ static void SM_SPI_MspInit(SPI_HandleTypeDef *hspi)
   GPIO_InitStruct.Alternate = SM_SPI_MOSI_AF;
   GPIO_InitStruct.Pin = SM_SPI_MOSI_PIN;
   HAL_GPIO_Init(SM_SPI_MOSI_GPIO_PORT, &GPIO_InitStruct);
+
+//Import from IIS3DWB_Peripheral_Init() in iis3dwb_app.c
+  /*Configure GPIO pin : IIS3DWB_SPI_CS_Pin */
+  GPIO_InitStruct.Pin = IIS3DWB_SPI_CS_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+  HAL_GPIO_Init(IIS3DWB_SPI_CS_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : STTS751_INT_Pin IIS3DWB_INT1_Pin */
+  GPIO_InitStruct.Pin =  IIS3DWB_INT1_Pin ;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(IIS3DWB_INT1_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins: Select_1_2*/
+  GPIO_InitStruct.Pin = IIS3DWB_1_2_SEL_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(IIS3DWB_1_2_SEL_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins: Select_3_4*/
+  GPIO_InitStruct.Pin = IIS3DWB_3_4_SEL_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(IIS3DWB_3_4_SEL_GPIO_Port, &GPIO_InitStruct);
+//Import from IIS3DWB_Peripheral_Init() in iis3dwb_app.c
 
   SM_SPIx_CLK_ENABLE();
     
