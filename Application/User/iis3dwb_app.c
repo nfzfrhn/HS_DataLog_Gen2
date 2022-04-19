@@ -72,7 +72,7 @@ void IIS3DWB_Peripheral_Init(void)
   __HAL_RCC_GPIOD_CLK_ENABLE();		//SPI2_CLK,SPI2_MISO
   __HAL_RCC_GPIOF_CLK_ENABLE();		//SEL_3_4
   __HAL_RCC_GPIOG_CLK_ENABLE();		//SEL_1_2
-  
+
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(IIS3DWB_SPI_CS_GPIO_Port, IIS3DWB_SPI_CS_Pin, GPIO_PIN_SET);
 
@@ -226,8 +226,8 @@ static void IIS3DWB_Thread(void const *argument)
     }
     else if(IIS3DWB_Sensor_State == SM_SENSOR_STATE_RUNNING)
     {  
-      osSemaphoreWait(iis3dwb_data_ready_sem_id,  osWaitForever);     
-      
+      osSemaphoreWait(iis3dwb_data_ready_sem_id,  osWaitForever);
+
       if(IIS3DWB_Sensor_State == SM_SENSOR_STATE_RUNNING) /* Change of state can happen while task blocked */
       {
         /* Check FIFO_WTM_IA anf fifo level. We do not use PID in order to avoid reading one register twice */

@@ -570,7 +570,7 @@ void set_default_description(void)
   maxWriteTimeSensor[mp23abs1_com_id] = 1000 * WRITE_BUFFER_SIZE_MP23ABS1 / (uint32_t)(MP23ABS1_Init_Param.ODR * 2); 
   
   /**********/ 
-  
+
   /* STTS751 */
   stts751_com_id = COM_AddSensor();
   
@@ -592,7 +592,7 @@ void set_default_description(void)
   tempSensor->sensorStatus.measuredODR = 0.0f;
   tempSensor->sensorStatus.initialOffset = 0.0f;
   tempSensor->sensorStatus.samplesPerTimestamp = 20;
-  tempSensor->sensorStatus.isActive = 0;					//Changed
+  tempSensor->sensorStatus.isActive = 1;					//Changed
   tempSensor->sensorStatus.usbDataPacketSize = 16;
   tempSensor->sensorStatus.sdWriteBufferSize = WRITE_BUFFER_SIZE_STTS751;
   tempSensor->sensorStatus.comChannelNumber = -1;

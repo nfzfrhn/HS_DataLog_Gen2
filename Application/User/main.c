@@ -21,7 +21,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "ff.h"			//Declaration of FatFs API
+//#include "ff.h"			//Declaration of FatFs API
 
 /* Private variables ---------------------------------------------------------*/
 USBD_HandleTypeDef USBD_Device;
@@ -82,7 +82,7 @@ static void Error_Handler(void);
 static void MX_USART2_Init(void);
 void PVD_Config(void);
 void SystemClock_Config(void);
-static void MX_SDMMC1_SD_Init(void);
+//static void MX_SDMMC1_SD_Init(void);
 
 //Battery SOC var
 uint32_t mvLevel = 0;
@@ -485,11 +485,11 @@ void vApplicationIdleHook( void )
   }
 }
 
-//RTC
-void HAL_RTC_AlarmAEventCallback(RTC_HandleTypeDef *hrtc)
-{
-
-}
+////RTC
+//void HAL_RTC_AlarmAEventCallback(RTC_HandleTypeDef *hrtc)
+//{
+//
+//}
 
 
 /**
@@ -685,9 +685,10 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   {
 	  case USER_BUTTON_PIN:
 		  userButtonCallback(GPIO_Pin);
+		  break;
 	  case  IIS3DWB_INT1_Pin:
 		  UpdateTimerValue();
-
+		  break;
 	  default:
 		break;
   }

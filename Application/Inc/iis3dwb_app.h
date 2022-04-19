@@ -47,6 +47,7 @@ extern EXTI_HandleTypeDef iis3dwb_exti;
 #define IIS3DWB_INT1_Pin 			GPIO_PIN_14
 #define IIS3DWB_INT1_GPIO_Port 		GPIOE
 #define IIS3DWB_INT1_EXTI_IRQn 		EXTI15_10_IRQn
+
 #elif checkSPI2
 #define IIS3DWB_SPI_CS_Pin 			GPIO_PIN_13
 #define IIS3DWB_SPI_CS_GPIO_Port 	GPIOB

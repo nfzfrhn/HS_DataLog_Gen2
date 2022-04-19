@@ -41,7 +41,7 @@
 /* Private variables ---------------------------------------------------------*/
 FATFS SDFatFs;  /* File system object for SD card logical drive */
 FIL FileHandler[COM_MAX_SENSORS];
-FIL BatteryFileHandler;
+//FIL BatteryFileHandler;
 FIL FileConfigHandler;
 FIL FileLogError;
 FIL FileConfigJSON;
@@ -70,9 +70,8 @@ extern uint8_t ism330dhcx_com_id;
 extern uint8_t lps22hh_com_id;
 extern uint8_t stts751_com_id;
 
-extern uint32_t batteryLevel;
+//extern uint32_t batteryLevel;
 extern UART_HandleTypeDef huart2;
-
 /* Private function prototypes -----------------------------------------------*/
 static void Enable_Sensors(void);
 static void Activate_Sensor(uint32_t id);
@@ -162,8 +161,10 @@ static void SDM_Thread(void const *argument)
       if (fno.fname[0] == 0) break;
       if (fno.fattrib & AM_ARC) /* It is a file. */
       {
-        isJSON = strcmp(".json",fno.fname);
-        if (isJSON)
+//        isJSON = strcmp(".json",fno.fname);
+        isJSON = strcmp("DeviceConfig.json",fno.fname);
+//        if (isJSON)
+        if (!isJSON)
         {
           if(f_open(&FileConfigJSON, fno.fname, FA_OPEN_EXISTING | FA_READ) == FR_OK)
           {  
@@ -177,9 +178,10 @@ static void SDM_Thread(void const *argument)
             HSD_JSON_free(config_JSON_string);
             config_JSON_string = NULL;
             f_close(&FileConfigJSON);
+            break;
           }
         }
-        break; 
+//        break;
       }
     }
     f_closedir(&dir);
@@ -477,6 +479,8 @@ void SDM_SD_Init(void)
         HAL_Delay(500);
         BSP_LED_Off(LED1);
         HAL_Delay(100);
+        char wakeUp [] = {"Error in FatFs \n"};				//Nafiz: Add this on 12.04.2022
+        HAL_UART_Transmit(&huart2, (uint8_t *) wakeUp, sizeof(wakeUp), HAL_MAX_DELAY);
       }
     }
   }
@@ -609,29 +613,29 @@ uint8_t SDM_InitFiles(void)
   dir_n = SDM_GetLastDirNumber();
   dir_n++;
   
-  //Open or Create new File in SD Card for Battery SOC
-  char BatSocFileName [20] = "Battery_SOC";
-  char dir_n_string [4];
-  itoa(dir_n,dir_n_string,10);
-  strcat(BatSocFileName,dir_n_string);
-  strcat(BatSocFileName,".txt");
-  if(f_open(&BatteryFileHandler, BatSocFileName, FA_CREATE_ALWAYS | FA_WRITE) != FR_OK)
-   {
-     return 1;
-   }
-
-  //Write data 8 in text file
-  char buffer [20] = "SOC:";
-  char socString[2];
-  itoa(batteryLevel,socString,10);
-  strcat(buffer,socString);
-  uint32_t buffSize = sizeof(buffer);
-  uint32_t byteswritten, bytesread; /*File write/read counts */
-
-  if(f_write(&BatteryFileHandler, (uint8_t*) buffer, buffSize, (void *)&byteswritten) != FR_OK)
-  {
-    return 0;
-  }
+//  //Open or Create new File in SD Card for Battery SOC
+//  char BatSocFileName [20] = "Battery_SOC";
+//  char dir_n_string [4];
+//  itoa(dir_n,dir_n_string,10);
+//  strcat(BatSocFileName,dir_n_string);
+//  strcat(BatSocFileName,".txt");
+//  if(f_open(&BatteryFileHandler, BatSocFileName, FA_CREATE_ALWAYS | FA_WRITE) != FR_OK)
+//   {
+//     return 1;
+//   }
+//
+//  //Write data 8 in text file
+//  char buffer [20] = "SOC:";
+//  char socString[2];
+//  itoa(batteryLevel,socString,10);
+//  strcat(buffer,socString);
+//  uint32_t buffSize = sizeof(buffer);
+//  uint32_t byteswritten, bytesread; /*File write/read counts */
+//
+//  if(f_write(&BatteryFileHandler, (uint8_t*) buffer, buffSize, (void *)&byteswritten) != FR_OK)
+//  {
+//    return 0;
+//  }
 
   sprintf(dir_name, "%s%03ld", LOG_DIR_PREFIX, dir_n);
   
@@ -716,9 +720,8 @@ uint8_t SDM_CloseFiles(void)
       }
     }
   }
-  f_close(&BatteryFileHandler);
+//  f_close(&BatteryFileHandler);
   
-
 #ifdef LOG_ERROR
   if (f_close(&FileLogError)!= FR_OK)
   {
@@ -746,14 +749,14 @@ uint8_t SDM_CloseFiles(void)
   HSD_JSON_free(JSON_string);
   JSON_string = NULL;
   
-  //-------------------------If SDM_FILE closed go in standby mode------------------------------------
-  //-------------------------Before entering the the standby-mode set Alarm---------------------------
-  char standbyMode [] = {"Standby-Mode!!!"};
-  HAL_UART_Transmit(&huart2, (uint8_t *) standbyMode, sizeof(standbyMode), HAL_MAX_DELAY);
-  MX_RTC_Init();
-  HAL_SuspendTick();
-  //HAL_PWR_EnterSTANDBYMode();
-  HAL_PWREx_EnterSHUTDOWNMode();
+//  //-------------------------If SDM_FILE closed go in standby mode------------------------------------
+//  //-------------------------Before entering the the standby-mode set Alarm---------------------------
+//  char standbyMode [] = {"Standby-Mode!!!"};
+//  HAL_UART_Transmit(&huart2, (uint8_t *) standbyMode, sizeof(standbyMode), HAL_MAX_DELAY);
+//  MX_RTC_Init();
+//  HAL_SuspendTick();
+//  //HAL_PWR_EnterSTANDBYMode();
+//  HAL_PWREx_EnterSHUTDOWNMode();
 
   return 0;
 }
@@ -998,6 +1001,7 @@ void userButtonCallback(uint16_t GPIO_Pin)
   {
   case USER_BUTTON_PIN:
 	  SDM_StartMeasurements();
+	  break;
   default:
     break;
   }

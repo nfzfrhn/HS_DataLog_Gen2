@@ -7,7 +7,6 @@
 ../Application/User/main.c:385:6:BC_Int_Callback	8	static
 ../Application/User/main.c:399:6:PVD_Config	24	static
 ../Application/User/main.c:422:6:vApplicationIdleHook	8	static
-../Application/User/main.c:489:6:HAL_RTC_AlarmAEventCallback	16	static
 ../Application/User/main.c:504:6:SENSOR_Generic_Data_Ready	64	static
 ../Application/User/main.c:600:6:IIS3DWB_Data_Ready	24	static
 ../Application/User/main.c:605:6:HTS221_Data_Ready	24	static
@@ -21,4 +20,4 @@
 ../Application/User/main.c:647:6:Peripheral_MSP_Init_All	8	static
 ../Application/User/main.c:665:6:Peripheral_OS_Init_All	8	static
 ../Application/User/main.c:682:6:HAL_GPIO_EXTI_Callback	16	static
-../Application/User/main.c:701:13:Error_Handler	4	static
+../Application/User/main.c:702:13:Error_Handler	4	static

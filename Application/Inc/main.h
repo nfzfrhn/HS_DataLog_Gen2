@@ -53,9 +53,7 @@ extern "C" {
 #include "lps22hh_app.h"
 #include "stts751_app.h"
 
-#include "rtc.h"
-
-
+//#include "rtc.h"
 
 //#include "debugPins.h"
 #include "STWIN_debug_pins.h"
